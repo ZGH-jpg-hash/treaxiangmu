@@ -1,0 +1,81 @@
+<!-- pages/camera/camera.wxml -->
+<view class="container">
+  <!-- 摄像头预览区域 -->
+  <view class="camera-container">
+    <!-- 【修改1】camera组件改用hidden控制，确保页面初始化时就渲染原生组件 -->
+    <camera 
+      hidden="{{!isCameraAuthorized}}"
+      device-position="back"
+      flash="auto" 
+      class="camera"
+      binderror="handleCameraError"
+    ></camera>
+    
+    <!-- 【修改2】占位符改用wx:if，与camera的hidden形成互斥显示 -->
+    <view wx:if="{{!isCameraAuthorized}}" class="camera-placeholder">
+      <text class="placeholder-text">正在获取摄像头权限...</text>
+    </view>
+    
+    <!-- 拍照区域指示框（非原生组件，保留wx:if即可） -->
+    <view wx:if="{{isCameraAuthorized}}" class="camera-guide">
+      <view class="guide-frame"></view>
+      <text class="guide-text">请将葡萄病变部位对准此区域</text>
+    </view>
+  </view>
+  
+  <view class="control-panel">
+    <!-- 相册选择按钮 -->
+    <button 
+      class="album-btn" 
+      bindtap="chooseImage"
+      type="default"
+      size="default"
+    >
+      从相册选择
+    </button>
+    
+    <!-- 拍照按钮增加权限状态禁用控制 -->
+    <button 
+      class="capture-btn" 
+      bindtap="takePhoto"
+      type="default"
+      size="default"
+      disabled="{{!isCameraAuthorized}}"
+    >
+      拍照识别
+    </button>
+  </view>
+  
+  <!-- 预览图片 -->
+  <view wx:if="{{previewImage}}" class="preview-container">
+    <image src="{{previewImage}}" class="preview-image"></image>
+    <view class="preview-controls">
+      <button 
+        class="retake-btn" 
+        bindtap="retakePhoto"
+        type="default"
+      >
+        重拍
+      </button>
+      <button 
+        class="confirm-btn" 
+        bindtap="confirmPhoto"
+        type="primary"
+      >
+        确认上传
+      </button>
+    </view>
+  </view>
+  
+  <!-- 加载动画 -->
+  <view wx:if="{{loading}}" class="loading-overlay">
+    <view class="loading-content">
+      <text class="loading-text">正在识别中...</text>
+      <view class="loading-dots">
+        <text class="loading-dot">{{loadingDots[0]}}</text>
+        <text class="loading-dot">{{loadingDots[1]}}</text>
+        <text class="loading-dot">{{loadingDots[2]}}</text>
+      </view>
+    </view>
+  </view>
+</view>

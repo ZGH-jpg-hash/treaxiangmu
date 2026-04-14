@@ -1,0 +1,216 @@
+/* pages/result/result.wxss */
+
+.container {
+  padding: 20rpx;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+/* 返回按钮 */
+.back-btn {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+  padding: 10rpx;
+  border-radius: 10rpx;
+  background-color: #fff;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
+}
+
+.back-icon {
+  font-size: 36rpx;
+  margin-right: 10rpx;
+  color: #4CAF50;
+}
+
+.back-text {
+  font-size: 28rpx;
+  color: #4CAF50;
+}
+
+/* 结果卡片 */
+.result-card {
+  background-color: #fff;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
+}
+
+.result-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+}
+
+.disease-info {
+  margin-bottom: 30rpx;
+}
+
+.disease-name {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #d32f2f;
+  margin-bottom: 10rpx;
+  display: block;
+}
+
+.confidence {
+  font-size: 24rpx;
+  color: #666;
+  background-color: #f5f5f5;
+  padding: 5rpx 15rpx;
+  border-radius: 20rpx;
+  display: inline-block;
+}
+
+.symptoms {
+  margin-top: 20rpx;
+}
+
+.subtitle {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #555;
+  margin-bottom: 15rpx;
+  display: block;
+}
+
+.text {
+  font-size: 26rpx;
+  color: #666;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+/* 建议卡片 */
+.suggestion-card,
+.medicine-card,
+.prevention-card {
+  background-color: #fff;
+  border-radius: 20rpx;
+  padding: 30rpx;
+  margin-bottom: 30rpx;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.1);
+}
+
+.card-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 20rpx;
+  display: block;
+}
+
+.suggestion-content,
+.prevention-content {
+  margin-top: 10rpx;
+}
+
+/* 用药列表 */
+.medicine-list {
+  margin-top: 10rpx;
+}
+
+.medicine-item {
+  padding: 20rpx;
+  border-bottom: 1rpx solid #eee;
+  margin-bottom: 20rpx;
+}
+
+.medicine-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.medicine-name {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10rpx;
+  display: block;
+}
+
+.medicine-usage {
+  font-size: 24rpx;
+  color: #666;
+  line-height: 1.5;
+  margin-bottom: 15rpx;
+  display: block;
+  white-space: pre-wrap;
+}
+
+.buy-section {
+  margin-top: 15rpx;
+}
+
+.buy-label {
+  font-size: 24rpx;
+  color: #666;
+  margin-right: 10rpx;
+}
+
+.buy-link {
+  font-size: 24rpx;
+  color: #1976D2;
+  text-decoration: underline;
+  word-break: break-all;
+}
+
+/* 操作按钮 */
+.action-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin: 30rpx 0;
+}
+
+.reidentify-btn,
+.share-btn {
+  width: 48%;
+  height: 80rpx;
+  line-height: 80rpx;
+  font-size: 28rpx;
+  border-radius: 10rpx;
+}
+
+/* 底部提示 */
+.footer-tip {
+  margin-top: 40rpx;
+  margin-bottom: 20rpx;
+  padding: 15rpx;
+  background-color: #fff3cd;
+  border-radius: 10rpx;
+  border-left: 4rpx solid #ffc107;
+}
+
+.tip-text {
+  font-size: 22rpx;
+  color: #856404;
+  line-height: 1.4;
+}
+
+/* 响应式调整 */
+@media (max-width: 375px) {
+  .disease-name {
+    font-size: 32rpx;
+  }
+  
+  .result-title,
+  .card-title {
+    font-size: 28rpx;
+  }
+  
+  .subtitle {
+    font-size: 26rpx;
+  }
+  
+  .text {
+    font-size: 24rpx;
+  }
+  
+  .reidentify-btn,
+  .share-btn {
+    font-size: 26rpx;
+  }
+}

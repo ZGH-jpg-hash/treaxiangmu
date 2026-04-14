@@ -1,0 +1,84 @@
+<!-- pages/index/index.wxml -->
+<view class="container">
+  <view class="card">
+    <image src="../../image/indeximage.png" class="image" mode="aspectFill"></image>
+    <text class="title">葡萄病害识别系统</text>
+    <text class="text">通过拍照识别葡萄的各种病害情况，获取专业的防治建议和用药指导。</text>
+    
+    <view class="feature-list">
+      <view class="feature-item">
+        <image src="../../image/快速识别.png" class="feature-icon"></image>
+        <text class="feature-text">快速识别</text>
+      </view>
+      <view class="feature-item">
+        <image src="../../image/专业建议.png" class="feature-icon"></image>
+        <text class="feature-text">专业建议</text>
+      </view>
+      <view class="feature-item">
+        <image src="../../image/用药指导.png" class="feature-icon"></image>
+        <text class="feature-text">用药指导</text>
+      </view>
+      <view class="feature-item">
+        <image src="../../image/便捷购买.png" class="feature-icon"></image>
+        <text class="feature-text">便捷购买</text>
+      </view>
+    </view>
+    
+    <navigator url="../camera/camera" class="btn" open-type="switchTab">
+      开始识别
+    </navigator>
+  </view>
+  
+  <view class="card">
+    <text class="subtitle">常见葡萄病害</text>
+    <view class="disease-list">
+      <view class="disease-item">
+        <image src="../../image/霜霉病.png" class="disease-icon"></image>
+        <text class="disease-name">霜霉病</text>
+      </view>
+      <view class="disease-item">
+        <image src="../../image/白粉病.png" class="disease-icon"></image>
+        <text class="disease-name">白粉病</text>
+      </view>
+      <view class="disease-item">
+        <image src="../../image/炭疽病.png" class="disease-icon"></image>
+        <text class="disease-name">炭疽病</text>
+      </view>
+      <view class="disease-item">
+        <image src="../../image/褐斑病.png" class="disease-icon"></image>
+        <text class="disease-name">褐斑病</text>
+      </view>
+    </view>
+  </view>
+  
+  <view class="card">
+    <text class="subtitle">使用指南</text>
+    <text class="text">1. 点击"开始识别"按钮进入拍照页面</text>
+    <text class="text">2. 拍摄葡萄叶片或果实的病变部位</text>
+    <text class="text">3. 等待系统分析识别结果</text>
+    <text class="text">4. 查看详细的防治建议和用药指导</text>
+  </view>
+  
+  <!-- 识别历史区域 -->
+  <view class="card">
+    <view class="history-header">
+      <text class="history-title">识别历史</text>
+      <text class="history-count">({{historyList.length}})</text>
+    </view>
+    <view class="history-list">
+      <view wx:if="{{historyList.length === 0}}" class="empty-history">
+        <text class="empty-text">暂无识别历史</text>
+      </view>
+      <view wx:else>
+        <view wx:for="{{historyList}}" wx:key="index" class="history-item">
+          <image src="{{item.image}}" class="history-image"></image>
+          <view class="history-info">
+            <text class="history-disease">{{item.diseaseName}}</text>
+            <text class="history-time">{{item.time}}</text>
+          </view>
+          <button class="history-view-btn" bindtap="viewHistoryItem" data-index="{{index}}">查看</button>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

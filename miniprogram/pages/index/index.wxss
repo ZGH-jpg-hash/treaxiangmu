@@ -1,0 +1,148 @@
+/* pages/index/index.wxss */
+
+/* 特色功能列表 */
+.feature-list {
+    display: flex;
+    justify-content: space-around;
+    margin: 30rpx 0;
+  }
+  
+  .feature-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 20%;
+  }
+  
+  .feature-icon {
+    width: 80rpx;
+    height: 80rpx;
+    margin-bottom: 10rpx;
+  }
+  
+  .feature-text {
+    font-size: 22rpx;
+    color: #666;
+    text-align: center;
+  }
+  
+  /* 病害列表 */
+  .disease-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    margin-top: 20rpx;
+  }
+  
+  .disease-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 23%;
+    margin-bottom: 20rpx;
+  }
+  
+  .disease-icon {
+    width: 100rpx;
+    height: 100rpx;
+    border-radius: 50%;
+    margin-bottom: 10rpx;
+  }
+  
+  .disease-name {
+    font-size: 22rpx;
+    color: #666;
+    text-align: center;
+  }
+  
+  /* 识别历史样式 */
+  .history-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20rpx;
+    padding-bottom: 15rpx;
+    border-bottom: 1rpx solid #e0e0e0;
+  }
+  
+  .history-title {
+    font-size: 28rpx;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .history-count {
+    font-size: 24rpx;
+    color: #666;
+    margin-left: 10rpx;
+  }
+  
+  .history-list {
+    max-height: 400rpx;
+    overflow-y: auto;
+  }
+  
+  .empty-history {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40rpx 0;
+    color: #999;
+  }
+  
+  .empty-text {
+    font-size: 24rpx;
+    color: #999;
+  }
+  
+  .history-item {
+    display: flex;
+    padding: 20rpx;
+    margin-bottom: 15rpx;
+    background-color: #f9f9f9;
+    border-radius: 10rpx;
+    align-items: center;
+  }
+  
+  .history-image {
+    width: 120rpx;
+    height: 120rpx;
+    border-radius: 8rpx;
+    margin-right: 20rpx;
+    object-fit: cover;
+  }
+  
+  .history-info {
+    flex: 1;
+    min-width: 0;
+  }
+  
+  .history-disease {
+    font-size: 26rpx;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 8rpx;
+    display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .history-time {
+    font-size: 22rpx;
+    color: #666;
+    display: block;
+  }
+  
+  .history-view-btn {
+  font-size: 22rpx;
+  padding: 8rpx 16rpx;
+  height: 60rpx;
+  line-height: 44rpx;
+  border-radius: 20rpx;
+}
+  
+  /* 文本样式 */
+  .text {
+    margin-bottom: 15rpx;
+  }
+  

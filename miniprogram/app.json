@@ -1,0 +1,42 @@
+{
+    "pages": [
+      "pages/index/index",
+      "pages/camera/camera",
+      "pages/result/result"
+    ],
+    "window": {
+      "backgroundTextStyle": "light",
+      "navigationBarBackgroundColor": "#4CAF50",
+      "navigationBarTitleText": "葡萄病害识别",
+      "navigationBarTextStyle": "white"
+    },
+    "permission": {
+      "scope.camera": {
+        "desc": "用于拍摄葡萄叶片照片，进行病害识别"
+      },
+      "scope.album": {
+        "desc": "用于从相册选择葡萄叶片照片"
+      }
+    },
+    "tabBar": {
+      "list": [
+        {
+          "pagePath": "pages/index/index",
+          "text": "首页"
+        },
+        {
+          "pagePath": "pages/camera/camera",
+          "text": "拍照识别"
+        }
+      ],
+      "backgroundColor": "#ffffff",
+      "color": "#666666",
+      "selectedColor": "#4CAF50"
+    },
+    "networkTimeout": {
+      "request": 30000,
+      "downloadFile": 30000
+    },
+    "debug": true,
+    "sitemapLocation": "sitemap.json"
+  }

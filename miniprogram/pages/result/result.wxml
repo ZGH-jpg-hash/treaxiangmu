@@ -1,0 +1,84 @@
+<!-- pages/result/result.wxml -->
+<view class="container">
+  <!-- 返回按钮 -->
+  <view class="back-btn" bindtap="goBack">
+    <text class="back-icon">←</text>
+    <text class="back-text">返回</text>
+  </view>
+  
+  <!-- 识别结果卡片 -->
+  <view class="result-card">
+    <text class="result-title">识别结果</text>
+    <view class="disease-info">
+      <text class="disease-name">{{result.diseaseName}}</text>
+      <text class="confidence">置信度: {{result.confidence * 100 | toFixed(1)}}%</text>
+    </view>
+    <view class="suggestions">
+      <text class="subtitle">症状描述</text>
+      <text class="text">{{result.symptoms}}</text>
+    </view>
+  </view>
+  
+  <!-- 防治建议卡片 -->
+  <view class="suggestion-card">
+    <text class="card-title">防治建议</text>
+    <view class="suggestion-content">
+      <text class="text">{{result.suggestions}}</text>
+    </view>
+  </view>
+  
+  <!-- 【修改点1】修正原有模块标题：用药建议 → 推荐用药（避免混淆） -->
+  <view class="medicine-card">
+    <text class="card-title">推荐用药</text>
+    <view class="medicine-list">
+      <view wx:for="{{result.medicines}}" wx:key="index" class="medicine-item">
+        <!-- 兼容处理：如果是字符串直接显示，如果是对象显示name/usage -->
+        <text class="medicine-name">{{item.name || item}}</text>
+        <text class="medicine-usage" wx:if="{{item.usage}}">{{item.usage}}</text>
+        <view class="buy-section" wx:if="{{item.link}}">
+          <text class="buy-label">购买链接:</text>
+          <text class="buy-link" bindtap="openBuyLink" data-link="{{item.link}}">{{item.link}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 【修改点2】新增真正的用药建议模块（绑定 medicineSuggestion 纯文本） -->
+  <view class="suggestion-card">
+    <text class="card-title">用药建议</text>
+    <view class="suggestion-content">
+      <text class="text">{{result.medicineSuggestion}}</text>
+    </view>
+  </view>
+  
+  <!-- 预防措施卡片 -->
+  <view class="prevention-card">
+    <text class="card-title">预防措施</text>
+    <view class="prevention-content">
+      <text class="text">{{result.prevention}}</text>
+    </view>
+  </view>
+  
+  <!-- 操作按钮 -->
+  <view class="action-buttons">
+    <button 
+      class="reidentify-btn" 
+      bindtap="reidentify"
+      type="default"
+    >
+      重新识别
+    </button>
+    <button 
+      class="share-btn" 
+      bindtap="shareResult"
+      type="primary"
+    >
+      分享结果
+    </button>
+  </view>
+  
+  <!-- 底部提示 -->
+  <view class="footer-tip">
+    <text class="tip-text">* 本识别结果仅供参考，如有疑问请咨询专业人士</text>
+  </view>
+</view>
