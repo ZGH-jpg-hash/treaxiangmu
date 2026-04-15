@@ -133,10 +133,10 @@ miniprogram/
 
 ## 开发团队
 
-- **前端开发**：[Your Name]
-- **后端开发**：[Your Name]
-- **UI设计**：[Your Name]
-- **AI模型训练**：[Your Name]
+- **前端开发**：[zgh]
+- **后端开发**：[zgh]
+- **UI设计**：[zgh]
+- **AI模型训练**：[zgh]
 
 ## 联系方式
 
