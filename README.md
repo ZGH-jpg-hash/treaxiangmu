@@ -140,8 +140,8 @@ miniprogram/
 
 ## 联系方式
 
-- **邮箱**：[your-email@example.com]
-- **微信**：[your-wechat-id]
+- **邮箱**：[1016115716@qq.com]
+- **微信**：[17748725583]
 
 ## 许可证
 
