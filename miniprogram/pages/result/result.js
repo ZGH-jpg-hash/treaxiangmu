@@ -9,10 +9,20 @@ Page({
     // 页面加载时执行
     console.log('Result page loaded', options);
     
-    // 解析传入的识别结果
+    // 【新增】页面加载时开启分享菜单（确保右上角也能分享）
+    wx.showShareMenu({
+      withShareTicket: true,
+      menus: ['shareAppMessage', 'shareTimeline'],
+      success: () => console.log('分享菜单开启成功'),
+      fail: (err) => console.error('分享菜单开启失败', err)
+    });
+    
+    // 解析传入的识别结果（核心修复：增加解码容错，兼容分享带参）
     if (options.result) {
       try {
-        const result = JSON.parse(options.result);
+        // 修复：先解码，再解析JSON，兼容分享编码后的参数
+        const decodeResult = decodeURIComponent(options.result);
+        const result = JSON.parse(decodeResult);
         console.log('Recognition result:', result);
         
         // 验证结果数据是否完整
@@ -114,9 +124,31 @@ Page({
   
   // 分享结果
   shareResult: function() {
-    wx.showShareMenu({
-      withShareTicket: true,
-      menus: ['shareAppMessage', 'shareTimeline']
+    const that = this;
+    wx.showActionSheet({
+      itemList: ['分享给好友', '分享到朋友圈'],
+      itemColor: '#4CAF50',
+      success: function(res) {
+        const tapIndex = res.tapIndex;
+        if (tapIndex === 0) {
+          // 用户选择“分享给好友”：按钮已配置open-type，直接唤起分享面板
+          wx.showToast({
+            title: '即将唤起好友分享面板',
+            icon: 'none',
+            duration: 1000
+          });
+        } else if (tapIndex === 1) {
+          // 用户选择“分享到朋友圈”：提示用户通过右上角触发
+          wx.showToast({
+            title: '请点击右上角菜单「分享到朋友圈」',
+            icon: 'none',
+            duration: 2000
+          });
+        }
+      },
+      fail: function(res) {
+        console.log('用户取消分享', res);
+      }
     });
   },
   
@@ -156,12 +188,15 @@ Page({
     console.log('Reach bottom');
   },
   
+  // ===================== 核心修复：分享给好友（带编码后的完整参数） =====================
   onShareAppMessage: function() {
-    // 分享
     const diseaseName = this.data.result ? this.data.result.diseaseName : '葡萄病害';
+    // 修复：编码结果参数，避免特殊字符/换行符导致解析失败
+    const encodeResult = encodeURIComponent(JSON.stringify(this.data.result));
     return {
       title: `葡萄病害识别结果：${diseaseName}`,
-      path: '/pages/result/result',
+      // 核心修复：路径携带编码后的结果参数，好友打开能正常拿到数据
+      path: `/pages/result/result?result=${encodeResult}`,
       imageUrl: '../../images/share.png',
       success: function(res) {
         console.log('Share success:', res);
@@ -172,13 +207,16 @@ Page({
     };
   },
   
+  // ===================== 核心修复：分享到朋友圈（增加参数编码） =====================
   onShareTimeline: function() {
-    // 分享到朋友圈
     const diseaseName = this.data.result ? this.data.result.diseaseName : '葡萄病害';
+    // 修复：编码结果参数，避免特殊字符/换行符导致解析失败
+    const encodeResult = encodeURIComponent(JSON.stringify(this.data.result));
     return {
       title: `葡萄病害识别结果：${diseaseName}`,
       imageUrl: '../../images/share.png',
-      query: 'result=' + JSON.stringify(this.data.result)
+      // 修复：使用编码后的参数，避免解析失败
+      query: `result=${encodeResult}`
     };
   }
 })

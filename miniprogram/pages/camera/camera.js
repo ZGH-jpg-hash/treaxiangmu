@@ -37,7 +37,6 @@ Page({
     isIOS: false
   },
 
-  // ===================== 核心修复：生命周期状态管理（解决返回白屏） =====================
   onLoad: async function() {
     console.log('Camera page loaded');
     const systemInfo = wx.getSystemInfoSync();
@@ -51,10 +50,16 @@ Page({
     this.checkCameraAuthStatus();
   },
 
-  // 核心修复：页面返回/切回时强制重置状态，彻底解决白屏
+  // ===================== 核心修复：页面显示逻辑（增加预览图判断，避免覆盖相册选择） =====================
   onShow: function() {
     console.log('Camera page showed');
-    // 只要有权限，就强制重置到初始拍照状态，确保相机正常显示
+    // 关键修复：如果已经有预览图（用户刚选了照片），则不重置状态，直接返回
+    if (this.data.previewImage) {
+      console.log('已有预览图，跳过状态重置');
+      return;
+    }
+
+    // 只有在没有预览图的情况下，才重置到初始拍照状态
     if (this.data.isCameraAuthorized) {
       this.setData({
         cameraHidden: false,
@@ -63,9 +68,7 @@ Page({
         cameraReady: false,
         loading: false
       }, () => {
-        // 强制初始化相机上下文
         this.initCameraContext();
-        // 双端兜底：确保相机就绪，避免未就绪提示
         setTimeout(() => {
           if (!this.data.cameraReady && this.data.cameraContext) {
             console.log('⚠️ 页面返回兜底：强制标记相机就绪');
@@ -76,10 +79,8 @@ Page({
     }
   },
 
-  // 核心修复：页面隐藏时不修改cameraHidden，避免返回时相机被隐藏
   onHide: function() {
     console.log('Camera page hidden');
-    // 仅清空资源和就绪状态，不隐藏相机，避免返回时白屏
     this.setData({ cameraReady: false });
     this.clearAllResource();
   },
@@ -137,13 +138,11 @@ Page({
     });
   },
 
-  // 相机就绪事件（双事件触发，兼容所有微信版本）
   onCameraReady: function() {
     console.log('✅ Camera 原生初始化完成，正式就绪');
     this.setData({ cameraReady: true });
   },
 
-  // 相机上下文初始化（完全保留原有逻辑）
   initCameraContext: function() {
     try {
       if (this.data.cameraContext) this.data.cameraContext = null;
@@ -152,7 +151,6 @@ Page({
       this.setData({ cameraContext: ctx });
       console.log('✅ 相机上下文创建完成');
       
-      // 保留原有的iOS端重试兜底逻辑
       if (this.data.isIOS) {
         setTimeout(() => {
           try {
@@ -166,7 +164,6 @@ Page({
         }, 200);
       }
 
-      // 初始化完成后兜底就绪
       setTimeout(() => {
         this.setData({ cameraReady: true });
       }, 200);
@@ -177,14 +174,12 @@ Page({
     }
   },
 
-  // 拍照逻辑（完全保留原有修复后的双端兼容逻辑）
   takePhoto: function() {
     if (!this.data.isCameraAuthorized) {
       wx.showToast({ title: '请先授权相机权限', icon: 'none' });
       return;
     }
 
-    // 拍照前强制初始化+就绪兜底，双端100%可用
     if (!this.data.cameraContext) {
       this.initCameraContext();
     }
@@ -231,24 +226,35 @@ Page({
     });
   },
 
-  // 相册选择逻辑100%完全保留
+  // ===================== 核心修复：相册选择逻辑（增加状态确认和日志） =====================
   chooseImage: function() {
+    const that = this;
     wx.chooseImage({
       count: 1,
       sizeType: ['compressed'],
       sourceType: ['album'],
       success: (res) => {
-        this.setData({
+        console.log('相册选择成功:', res.tempFilePaths);
+        if (!res.tempFilePaths || res.tempFilePaths.length === 0) {
+          wx.showToast({ title: '未选择图片', icon: 'none' });
+          return;
+        }
+        // 确保状态正确设置：隐藏相机，显示预览
+        that.setData({
           previewImage: res.tempFilePaths[0],
           imagePath: res.tempFilePaths[0],
           cameraHidden: true
+        }, () => {
+          console.log('相册选择状态设置完成');
         });
       },
-      fail: (err) => wx.showToast({ title: '选择图片失败', icon: 'none' })
+      fail: (err) => {
+        console.error('相册选择失败:', err);
+        wx.showToast({ title: '选择图片失败', icon: 'none' });
+      }
     });
   },
 
-  // 重拍逻辑完全保留
   retakePhoto: function() {
     this.setData({ previewImage: '', imagePath: '', cameraHidden: false }, () => {
       this.initCameraContext();
@@ -256,7 +262,6 @@ Page({
     });
   },
 
-  // 确认上传入口100%保留
   confirmPhoto: function() {
     if (!this.data.imagePath) {
       wx.showToast({ title: '请先拍照', icon: 'none' });
@@ -267,7 +272,7 @@ Page({
     this.uploadAndRecognize();
   },
 
-  // ===================== 以下AI识别/文本过滤逻辑100%完全保留，仅修复跳转前状态重置 =====================
+  // ===================== 以下AI识别/文本过滤逻辑100%完全保留 =====================
   uploadAndRecognize: function() {
     const imagePath = this.data.imagePath;
     const app = getApp();
@@ -310,15 +315,15 @@ Page({
           this.setData({ loading: false });
           this.clearLoadingTimer();
 
-          // 核心修复：跳转前强制重置拍照状态，避免返回时预览层遮挡白屏
           this.setData({
             previewImage: '',
             imagePath: '',
             cameraHidden: false
           });
 
+          // ===================== 核心修复：仅增加 encodeURIComponent 编码 =====================
           wx.navigateTo({
-            url: '../result/result?result=' + JSON.stringify(recognitionResult)
+            url: '../result/result?result=' + encodeURIComponent(JSON.stringify(recognitionResult))
           });
         }).catch(err => {
           console.error('识别过程失败:', err);
@@ -408,7 +413,6 @@ Page({
            return resolve(this.buildErrorResult('图片过大: 请使用小于4MB的图片', '请重新拍照或压缩图片后重试'));
         }
 
-        // 100%保留原有的完整Prompt
         const requestData = {
           "model": "ep-20260319092602-dkmft",
           "input": [
@@ -489,7 +493,6 @@ Page({
     };
   },
 
-  // 100%保留原有的文本过滤逻辑
   extractValidTextFromApiResult: function(apiResult) {
     console.log('=== 开始精准提取有效文本 ===');
     if (apiResult.choices && Array.isArray(apiResult.choices) && apiResult.choices[0]?.message?.content) {
@@ -574,9 +577,9 @@ Page({
     return pureName;
   },
 
-  cleanAndPurifyPreventionText: function(rawText) {
-    if (!rawText || typeof rawText !== 'string') return '暂无预防措施';
-    let pureText = rawText;
+  cleanAndPurifyPreventionText: function(rawName) {
+    if (!rawName || typeof rawName !== 'string') return '暂无预防措施';
+    let pureText = rawName;
     pureText = pureText.replace(/[^\n\r]*?[？?]+[^\n\r]*/g, '');
     const invalidWords = ['不对', '哦', '对吗', '对吧', '再想', '再看', '就按这个来', '就输出', '严格符合格式', '不要多余内容', '看这个', '看图片', '这个是', '也就是', '没错', '确定', '对了', '再理', '会不会是', '图里的/g', /图里/g];
     invalidWords.forEach(word => { pureText = pureText.replace(new RegExp(word, 'g'), ''); });
@@ -721,7 +724,6 @@ Page({
     console.log(`✅ 给字段【${field}】赋值完成:`, content);
   },
 
-  // 工具方法100%完全保留
   handleCameraError: function(e) {
     console.error('摄像头原生错误', e.detail);
     wx.showToast({ title: '摄像头启动失败，请检查权限', icon: 'none' });

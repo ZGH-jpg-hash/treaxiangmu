@@ -21,28 +21,15 @@ Page({
       console.log('Loaded history:', history);
     },
     
-    // 查看历史记录
+    // 查看历史记录（核心修复：增加 encodeURIComponent 编码）
     viewHistoryItem: function(e) {
       const index = e.currentTarget.dataset.index;
       const historyItem = this.data.historyList[index];
       console.log('Viewing history item:', historyItem);
       
-      // 跳转到结果页面，传递历史记录数据
+      // 直接传递完整的历史识别结果，和AI识别返回的格式完全一致，增加编码
       wx.navigateTo({
-        url: '../result/result?result=' + JSON.stringify({
-          diseaseName: historyItem.diseaseName,
-          confidence: historyItem.confidence,
-          symptoms: '历史记录症状描述',
-          suggestions: '历史记录防治建议',
-          medicines: [
-            {
-              name: '历史记录农药',
-              usage: '历史记录使用方法',
-              link: 'https://example.com'
-            }
-          ],
-          prevention: '历史记录预防措施'
-        })
+        url: '../result/result?result=' + encodeURIComponent(JSON.stringify(historyItem))
       });
     },
     
@@ -72,6 +59,7 @@ Page({
     onPullDownRefresh: function() {
       // 下拉刷新
       console.log('Pull down refresh');
+      this.loadHistory();
       wx.stopPullDownRefresh();
     },
     
