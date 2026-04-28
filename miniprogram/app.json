@@ -2,7 +2,9 @@
   "pages": [
     "pages/index/index",
     "pages/camera/camera",
-    "pages/result/result"
+    "pages/result/result",
+    "pages/knowledge/knowledge",
+    "pages/knowledge/detail/detail"
   ],
   "window": {
     "backgroundTextStyle": "light",

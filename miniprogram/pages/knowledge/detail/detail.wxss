@@ -1,0 +1,144 @@
+/* pages/knowledge/detail/detail.wxss */
+.container {
+  min-height: 100vh;
+  background-color: #f5f7fa;
+  padding: 20rpx 30rpx;
+}
+
+/* 头部卡片样式 */
+.header-card {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20rpx;
+  padding: 40rpx;
+  margin-bottom: 20rpx;
+  color: #fff;
+  box-shadow: 0 8rpx 24rpx rgba(102, 126, 234, 0.3);
+}
+
+.disease-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20rpx;
+}
+
+.disease-name {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #fff;
+}
+
+.disease-type {
+  font-size: 24rpx;
+  padding: 8rpx 20rpx;
+  border-radius: 24rpx;
+  background-color: rgba(255, 255, 255, 0.2);
+  color: #fff;
+}
+
+.disease-alias,
+.disease-pathogen {
+  font-size: 28rpx;
+  color: rgba(255, 255, 255, 0.9);
+  margin-top: 12rpx;
+  line-height: 1.5;
+}
+
+.label {
+  font-weight: bold;
+  color: #fff;
+}
+
+/* 通用章节卡片样式 */
+.section-card {
+  background-color: #fff;
+  border-radius: 16rpx;
+  padding: 30rpx;
+  margin-bottom: 20rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20rpx;
+  padding-bottom: 15rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.section-icon {
+  font-size: 36rpx;
+  margin-right: 15rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.section-content {
+  font-size: 28rpx;
+  color: #555;
+  line-height: 1.8;
+}
+
+/* 列表项样式 */
+.list-item {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 15rpx;
+}
+
+.item-num {
+  font-weight: bold;
+  color: #667eea;
+  margin-right: 15rpx;
+  min-width: 40rpx;
+}
+
+.item-text {
+  flex: 1;
+  color: #555;
+  line-height: 1.7;
+}
+
+/* 加载中样式 */
+.loading-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+.loading-text {
+  font-size: 28rpx;
+  color: #999;
+}
+
+/* 识别要点高亮样式 */
+.highlight {
+  color: #d32f2f;
+  font-weight: bold;
+  background-color: #ffebee;
+  padding: 20rpx;
+  border-radius: 8rpx;
+  border-left: 6rpx solid #d32f2f;
+}
+
+/* 注意事项特殊样式 */
+.warning-card {
+  background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+  border: 2rpx solid #ff9800;
+}
+
+/* 病毒性病害标签样式 */
+.tag-virus {
+  background-color: #e3f2fd;
+  color: #1976d2;
+}
+
+/* 底部间距 */
+.bottom-space {
+  height: 60rpx;
+}

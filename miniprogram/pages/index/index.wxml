@@ -81,4 +81,15 @@
       </view>
     </view>
   </view>
+
+  <!-- 【新增】病害知识库入口卡片 -->
+  <view class="card knowledge-card">
+    <view class="knowledge-header">
+      <text class="subtitle">📚 病害知识库</text>
+    </view>
+    <text class="text">收录12种常见葡萄病害，包含完整的识别要点、发病条件、预防措施和防治方法</text>
+    <button class="btn knowledge-btn" bindtap="goKnowledge">
+      进入知识库
+    </button>
+  </view>
 </view>

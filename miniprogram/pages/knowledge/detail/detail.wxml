@@ -1,0 +1,109 @@
+<!-- pages/knowledge/detail/detail.wxml -->
+<view class="container" wx:if="{{!isLoading && disease}}">
+  <!-- 头部病害信息卡片 -->
+  <view class="header-card">
+    <view class="disease-title-row">
+      <text class="disease-name">{{disease.name}}</text>
+      <text class="disease-type tag-{{disease.type === '真菌性病害' ? 'fungi' : 'health'}}">
+        {{disease.type}}
+      </text>
+    </view>
+    <view class="disease-alias" wx:if="{{disease.alias}}">
+      <text class="label">别名：</text>{{disease.alias}}
+    </view>
+    <view class="disease-pathogen" wx:if="{{disease.pathogen}}">
+      <text class="label">病原菌：</text>{{disease.pathogen}}
+    </view>
+  </view>
+
+
+   <!-- 【新增】危害部位 -->
+  <view class="section-card" wx:if="{{disease.damageParts}}">
+    <view class="section-header">
+      <text class="section-icon">📍</text>
+      <text class="section-title">危害部位</text>
+    </view>
+    <view class="section-content">{{disease.damageParts}}</view>
+  </view>
+
+  <!-- 症状描述 -->
+  <view class="section-card">
+    <view class="section-header">
+      <text class="section-icon">📋</text>
+      <text class="section-title">发病症状</text>
+    </view>
+    <view class="section-content">{{disease.symptoms}}</view>
+  </view>
+
+   <!-- 【新增】识别要点 -->
+  <view class="section-card" wx:if="{{disease.identificationPoints}}">
+    <view class="section-header">
+      <text class="section-icon">🔍</text>
+      <text class="section-title">识别要点</text>
+    </view>
+    <view class="section-content highlight">{{disease.identificationPoints}}</view>
+  </view>   
+
+  <!-- 发病周期 -->
+  <view class="section-card" wx:if="{{disease.cycle}}">
+    <view class="section-header">
+      <text class="section-icon">📅</text>
+      <text class="section-title">发病周期</text>
+    </view>
+    <view class="section-content">{{disease.cycle}}</view>
+  </view>
+
+   <!-- 【新增】发病条件 -->
+  <view class="section-card" wx:if="{{disease.onsetConditions}}">
+    <view class="section-header">
+      <text class="section-icon">🌡️</text>
+      <text class="section-title">发病条件</text>
+    </view>
+    <view class="section-content">{{disease.onsetConditions}}</view>
+  </view>
+
+  <!-- 预防措施 -->
+  <view class="section-card" wx:if="{{disease.prevention && disease.prevention.length > 0}}">
+    <view class="section-header">
+      <text class="section-icon">🛡️</text>
+      <text class="section-title">预防措施</text>
+    </view>
+    <view class="section-content">
+      <view class="list-item" wx:for="{{disease.prevention}}" wx:key="index">
+        <text class="item-num">{{index+1}}.</text>
+        <text class="item-text">{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 防治方法 -->
+  <view class="section-card" wx:if="{{disease.treatment && disease.treatment.length > 0}}">
+    <view class="section-header">
+      <text class="section-icon">💊</text>
+      <text class="section-title">防治方法</text>
+    </view>
+    <view class="section-content">
+      <view class="list-item" wx:for="{{disease.treatment}}" wx:key="index">
+        <text class="item-num">{{index+1}}.</text>
+        <text class="item-text">{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 【新增】注意事项 -->
+  <view class="section-card warning-card" wx:if="{{disease.notes}}">
+    <view class="section-header">
+      <text class="section-icon">⚠️</text>
+      <text class="section-title">注意事项</text>
+    </view>
+    <view class="section-content">{{disease.notes}}</view>
+  </view>
+
+  <!-- 底部间距 -->
+  <view class="bottom-space"></view>
+</view>
+
+<!-- 加载中状态 -->
+<view class="loading-container" wx:if="{{isLoading}}">
+  <text class="loading-text">加载中...</text>
+</view>

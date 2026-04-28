@@ -1,0 +1,57 @@
+<!-- pages/knowledge/knowledge.wxml -->
+<view class="container">
+  <!-- 顶部搜索栏 -->
+  <view class="search-container">
+    <view class="search-box">
+      <text class="search-icon">🔍</text>
+      <input 
+        class="search-input" 
+        placeholder="搜索病害名称（如：黑痘病）" 
+        bindinput="onSearchInput"
+        value="{{searchKeyword}}"
+        placeholder-class="search-placeholder"
+      />
+      <text 
+        class="clear-btn" 
+        wx:if="{{searchKeyword}}"
+        bindtap="onSearchInput"
+        data-value=""
+      >
+        ✕
+      </text>
+    </view>
+  </view>
+
+  <!-- 病害列表 -->
+  <view class="disease-list">
+    <view 
+      class="disease-item" 
+      wx:for="{{diseaseList}}" 
+      wx:key="id"
+      data-id="{{item.id}}"
+      data-name="{{item.name}}"
+      bindtap="goDetail"
+      hover-class="item-hover"
+    >
+      <view class="disease-header">
+        <text class="disease-name">{{item.name}}</text>
+        <text class="disease-type tag-{{item.type === '真菌性病害' ? 'fungi' : 'health'}}">
+          {{item.type}}
+        </text>
+      </view>
+      <view class="disease-alias" wx:if="{{item.alias}}">
+        别名：{{item.alias}}
+      </view>
+      <view class="disease-symptoms">
+        {{item.symptoms.length > 50 ? item.symptoms.substring(0, 50) + '...' : item.symptoms}}
+      </view>
+      <view class="disease-arrow">→</view>
+    </view>
+  </view>
+
+  <!-- 空状态 -->
+  <view class="empty-state" wx:if="{{diseaseList.length === 0}}">
+    <text class="empty-icon">🌱</text>
+    <text class="empty-text">{{searchKeyword ? '未找到相关病害' : '暂无病害数据'}}</text>
+  </view>
+</view>

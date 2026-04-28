@@ -272,85 +272,117 @@ Page({
     this.uploadAndRecognize();
   },
 
-  // ===================== 以下AI识别/文本过滤逻辑100%完全保留 =====================
+  // ===================== 【修改】AI识别逻辑（仅添加外层try-catch和getApp容错） =====================
   uploadAndRecognize: function() {
-    const imagePath = this.data.imagePath;
-    const app = getApp();
-    console.log('Uploading image for recognition:', imagePath);
-    
-    wx.getNetworkType({
-      success: (res) => {
-        const networkType = res.networkType;
-        console.log('网络类型:', networkType);
-        
-        if (networkType === 'none') {
-          this.setData({ loading: false });
-          this.clearLoadingTimer();
-          wx.showToast({ title: '网络连接失败，请检查网络设置', icon: 'none', duration: 3000 });
-          return;
-        }
-        
-        const apiKey = app.globalData.apiKey;
-        if (!apiKey) {
-          this.setData({ loading: false });
-          this.clearLoadingTimer();
-          wx.showToast({ title: 'API Key未配置，请检查app.js', icon: 'none', duration: 3000 });
-          return;
-        }
-        
-        if (!app.globalData.apiUrl) {
-          this.setData({ loading: false });
-          this.clearLoadingTimer();
-          wx.showToast({ title: 'API URL未配置，请检查app.js', icon: 'none', duration: 3000 });
-          return;
-        }
-        
-        this.recognizeImage(imagePath, apiKey).then(recognitionResult => {
-          console.log('最终识别结果:', recognitionResult);
-          if (!recognitionResult || typeof recognitionResult !== 'object') {
-            throw new Error('识别结果无效');
-          }
-          
-          this.saveHistory(recognitionResult, this.data.imagePath);
-          this.setData({ loading: false });
-          this.clearLoadingTimer();
-
-          this.setData({
-            previewImage: '',
-            imagePath: '',
-            cameraHidden: false
-          });
-
-          // ===================== 核心修复：仅增加 encodeURIComponent 编码 =====================
-          wx.navigateTo({
-            url: '../result/result?result=' + encodeURIComponent(JSON.stringify(recognitionResult))
-          });
-        }).catch(err => {
-          console.error('识别过程失败:', err);
-          this.setData({ loading: false });
-          this.clearLoadingTimer();
-          
-          let errorMessage = '识别失败';
-          if (err.errMsg && err.errMsg.includes('url not in domain list')) {
-            errorMessage = '网络配置错误：请在微信小程序后台添加ark.cn-beijing.volces.com域名';
-          } else if (err.message) {
-            errorMessage = '识别失败: ' + err.message;
-          }
-          
-          wx.showToast({ title: errorMessage, icon: 'none', duration: 5000 });
-        });
-      },
-      fail: (err) => {
-        console.error('获取网络状态失败:', err);
+    // 新增外层try-catch，捕获所有同步异常
+    try {
+      const imagePath = this.data.imagePath;
+      // 【新增】getApp()容错处理
+      const app = getApp();
+      if (!app || !app.globalData) {
+        console.error('getApp()返回undefined，全局数据不可用');
         this.setData({ loading: false });
         this.clearLoadingTimer();
-        wx.showToast({ title: '获取网络状态失败，请检查网络连接', icon: 'none', duration: 3000 });
+        wx.showToast({
+          title: '系统初始化失败，请重启小程序',
+          icon: 'none',
+          duration: 3000
+        });
+        return;
       }
-    });
+      
+      console.log('Uploading image for recognition:', imagePath);
+      
+      wx.getNetworkType({
+        success: (res) => {
+          const networkType = res.networkType;
+          console.log('网络类型:', networkType);
+          
+          if (networkType === 'none') {
+            this.setData({ loading: false });
+            this.clearLoadingTimer();
+            wx.showToast({ title: '网络连接失败，请检查网络设置', icon: 'none', duration: 3000 });
+            return;
+          }
+          
+          const apiKey = app.globalData.apiKey;
+          if (!apiKey) {
+            this.setData({ loading: false });
+            this.clearLoadingTimer();
+            wx.showToast({ title: 'API Key未配置，请检查app.js', icon: 'none', duration: 3000 });
+            return;
+          }
+          
+          if (!app.globalData.apiUrl) {
+            this.setData({ loading: false });
+            this.clearLoadingTimer();
+            wx.showToast({ title: 'API URL未配置，请检查app.js', icon: 'none', duration: 3000 });
+            return;
+          }
+          
+          this.recognizeImage(imagePath, apiKey).then(recognitionResult => {
+            console.log('最终识别结果:', recognitionResult);
+            if (!recognitionResult || typeof recognitionResult !== 'object') {
+              throw new Error('识别结果无效');
+            }
+            
+            this.saveHistory(recognitionResult, this.data.imagePath);
+            this.setData({ loading: false });
+            this.clearLoadingTimer();
+
+            this.setData({
+              previewImage: '',
+              imagePath: '',
+              cameraHidden: false
+            });
+
+            // ===================== 核心修复：仅增加 encodeURIComponent 编码 =====================
+            wx.navigateTo({
+              url: '../result/result?result=' + encodeURIComponent(JSON.stringify(recognitionResult))
+            });
+          }).catch(err => {
+            console.error('识别过程失败:', err);
+            this.setData({ loading: false });
+            this.clearLoadingTimer();
+            
+            let errorMessage = '识别失败';
+            if (err.errMsg && err.errMsg.includes('url not in domain list')) {
+              errorMessage = '网络配置错误：请在微信小程序后台添加ark.cn-beijing.volces.com域名';
+            } else if (err.message) {
+              errorMessage = '识别失败: ' + err.message;
+            }
+            
+            wx.showToast({ title: errorMessage, icon: 'none', duration: 5000 });
+          });
+        },
+        fail: (err) => {
+          console.error('获取网络状态失败:', err);
+          this.setData({ loading: false });
+          this.clearLoadingTimer();
+          wx.showToast({ title: '获取网络状态失败，请检查网络连接', icon: 'none', duration: 3000 });
+        }
+      });
+    } catch (syncErr) {
+      // 捕获所有同步异常，确保loading状态被清除
+      console.error('识别初始化同步错误:', syncErr);
+      this.setData({ loading: false });
+      this.clearLoadingTimer();
+      wx.showToast({
+        title: '系统错误，请重启小程序',
+        icon: 'none',
+        duration: 3000
+      });
+    }
   },
 
+  // ===================== 【修改】recognizeImage方法（仅添加getApp容错） =====================
   recognizeImage: function(imagePath, apiKey) {
+    // 【新增】getApp()容错处理
     const app = getApp();
+    if (!app || !app.globalData) {
+      return Promise.resolve(this.buildErrorResult('系统初始化失败', '请重启小程序'));
+    }
+    
     const ARK_API_KEY = app.globalData.apiKey;
     const API_URL = app.globalData.apiUrl;
     
@@ -401,6 +433,7 @@ Page({
     });
   },
 
+  // ===================== 以下所有方法100%完全保留 =====================
   processImage: function(filePath, apiUrl, apiKey, resolve) {
     wx.getFileSystemManager().readFile({
       filePath: filePath,

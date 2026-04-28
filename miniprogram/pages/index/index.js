@@ -75,5 +75,24 @@ Page({
         path: '/pages/index/index',
         imageUrl: '../../images/share.png'
       };
+    },
+
+    // ===================== 【新增】跳转到病害知识库 =====================
+    goKnowledge: function() {
+      console.log('跳转到病害知识库');
+      wx.navigateTo({
+        url: '/pages/knowledge/knowledge',
+        success: () => {
+          console.log('✅ 知识库跳转成功');
+        },
+        fail: (err) => {
+          console.error('❌ 跳转知识库失败:', err);
+          wx.showToast({
+            title: '跳转失败，请检查页面配置',
+            icon: 'none',
+            duration: 2000
+          });
+        }
+      });
     }
   })

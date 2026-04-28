@@ -145,4 +145,44 @@
   .text {
     margin-bottom: 15rpx;
   }
+
+ /* 病害知识库卡片样式 */
+.knowledge-card {
+  /* 改为纯白色背景，与你界面主卡片完全一致 */
+  background: #ffffff;
+  /* 改为浅灰色细边框，柔和不突兀 */
+  border: 1rpx solid #e5e7eb;
+  /* 匹配你界面卡片的圆角弧度 */
+  border-radius: 16rpx;
+  /* 添加轻微阴影，增强卡片层次感 */
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.knowledge-header {
+  margin-bottom: 15rpx;
+}
+
+.knowledge-btn {
+  /* 完全匹配你界面"开始识别"按钮的绿色渐变 */
+  background: linear-gradient(135deg, #4caf50 0%, #388e3c 100%);
+  color: white;
+  border: none;
+  margin-top: 20rpx;
+  /* 匹配按钮圆角 */
+  border-radius: 12rpx;
+  /* 调整内边距，让按钮高度和你的界面按钮一致 */
+  padding: 24rpx 0;
+  /* 统一字体粗细 */
+  font-weight: 500;
+  /* 去掉默认点击高亮 */
+  outline: none;
+  /* 添加过渡效果，提升交互体验 */
+  transition: all 0.2s ease;
+}
+
+/* 可选：添加按钮悬停/点击反馈效果 */
+.knowledge-btn:active {
+  background: linear-gradient(135deg, #43a047 0%, #2e7d32 100%);
+  transform: scale(0.98);
+}
   

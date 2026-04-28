@@ -27,23 +27,33 @@
     </view>
   </view>
   
-  <!-- 【修改点1】修正原有模块标题：用药建议 → 推荐用药（避免混淆） -->
+  <!-- 【修改】推荐用药模块（适配淘宝自动搜索） -->
   <view class="medicine-card">
     <text class="card-title">推荐用药</text>
     <view class="medicine-list">
       <view wx:for="{{result.medicines}}" wx:key="index" class="medicine-item">
-        <!-- 兼容处理：如果是字符串直接显示，如果是对象显示name/usage -->
-        <text class="medicine-name">{{item.name || item}}</text>
-        <text class="medicine-usage" wx:if="{{item.usage}}">{{item.usage}}</text>
-        <view class="buy-section" wx:if="{{item.link}}">
-          <text class="buy-label">购买链接:</text>
-          <text class="buy-link" bindtap="openBuyLink" data-link="{{item.link}}">{{item.link}}</text>
-        </view>
+        <!-- 直接显示药品名称（AI返回的是字符串数组） -->
+        <text class="medicine-name">{{item}}</text>
+        <!-- 新增：淘宝购买按钮（传递药品名称而非静态链接） -->
+        <button 
+          class="buy-btn" 
+          data-medicine="{{item}}" 
+          bindtap="openBuyLink"
+          size="mini"
+          type="primary"
+          plain
+        >
+          淘宝购买
+        </button>
       </view>
+    </view>
+    <!-- 空状态提示（无推荐用药时显示） -->
+    <view class="empty-tip" wx:if="{{result.medicines.length === 0}}">
+      {{result.medicineSuggestion}}
     </view>
   </view>
   
-  <!-- 【修改点2】新增真正的用药建议模块（绑定 medicineSuggestion 纯文本） -->
+  <!-- 用药建议模块（保持不变） -->
   <view class="suggestion-card">
     <text class="card-title">用药建议</text>
     <view class="suggestion-content">
@@ -58,8 +68,21 @@
       <text class="text">{{result.prevention}}</text>
     </view>
   </view>
+
+  <!-- 【优化】知识库入口按钮（增加容错和调试样式） -->
+  <view class="knowledge-section" style="padding: 20rpx; background-color: #f0f9ff; border-radius: 12rpx; margin: 20rpx 0;">
+    <button 
+      class="knowledge-btn" 
+      bindtap="goDiseaseKnowledge"
+      type="primary"
+      style="background-color: #00a8e8; color: white; border: none; width: 100%; height: 88rpx; line-height: 88rpx; font-size: 32rpx; border-radius: 12rpx;"
+      hover-class="btn-hover"
+    >
+      查看{{result.diseaseName || '葡萄病害'}}详细知识库
+    </button>
+  </view>
   
-  <!-- 操作按钮（核心修复：仅给分享按钮添加 open-type="share"） -->
+  <!-- 操作按钮（保持不变） -->
   <view class="action-buttons">
     <button 
       class="reidentify-btn" 
